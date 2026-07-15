@@ -5,6 +5,9 @@ from dataclasses import dataclass, field
 from typing import Any
 from uuid import UUID, uuid4
 from enum import Enum
+from core.models.targeting import TargetingRules
+
+
 
 class FlagStatus(str, Enum):
 
@@ -47,11 +50,15 @@ class AIFlag:
      rollout_percentage: float
      quality_threshold: float
      baseline: VariantConfiguration
+     experimental: VariantConfiguration
 
      description: str=""
      enabled: bool= False
      rollback_trigger: RollbackTrigger = field(_default_factory=RollbackTrigger)
 
+     targeting: TargetingRules = field(
+          default_factory=TargetingRules
+     )
      status: FlagStatus=FlagStatus.DRAFT
      id: UUID = field(default_factory=uuid4)
 
