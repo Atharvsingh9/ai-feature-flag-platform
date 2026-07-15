@@ -33,7 +33,7 @@ class VariantConfiguration:
 @dataclass(frozen=True, slots=True)
 class RollbackTrigger:
 
-    enabled: bool
+    enabled: bool=False
     min_quality_score: float=0.70
     evaluation_window: int=100
 
@@ -54,7 +54,7 @@ class AIFlag:
 
      description: str=""
      enabled: bool= False
-     rollback_trigger: RollbackTrigger = field(_default_factory=RollbackTrigger)
+     rollback_trigger: RollbackTrigger = field(default_factory=RollbackTrigger)
 
      targeting: TargetingRules = field(
           default_factory=TargetingRules
