@@ -1,7 +1,7 @@
 """Tests for the SDK feature flag evaluator."""
 
 from sdk.python.ai_flags.evaluator import evaluate
-from core.models.evaluation import Variant
+from sdk.python.ai_flags.models.evaluation import Variant
 from sdk.python.ai_flags.models.flag import (
     Flag,
     FlagStatus,

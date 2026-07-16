@@ -3,7 +3,8 @@ from typing import Any
 
 
 from sdk.python.ai_flags.hashing import generate_bucket
-from core.models.evaluation import Variant
+from sdk.python.ai_flags.models.evaluation import Variant
+
 from sdk.python.ai_flags.models.flag import (
     Flag,
     FlagStatus,
