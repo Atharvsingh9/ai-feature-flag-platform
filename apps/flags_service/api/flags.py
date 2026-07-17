@@ -26,7 +26,13 @@ def create_flag(
     service: FlagService = Depends(get_flag_service),
 ) -> FlagResponse:
     try:
-        flag = service.create_flag(request)
+        flag = service.create_flag(
+    name=request.name,
+    description=request.description,
+    baseline_variant=request.baseline_variant,
+    experimental_variant=request.experimental_variant,
+    quality_threshold=request.quality_threshold,
+)
 
         return FlagResponse.model_validate(flag)
 

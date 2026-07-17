@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from infrastructure.database.models.flag import Flag
 from infrastructure.database.repositories.flag_repository import FlagRepository
-from apps.flags_service.services.exceptions import (
+from apps.flags_service.exceptions.flag_exceptions import (
     FlagAlreadyExistsError,
     FlagNotFoundError,
     InvalidQualityThresholdError,
