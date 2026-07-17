@@ -1,29 +1,17 @@
-from enum import Enum
+from __future__ import annotations
 
-from sqlalchemy import Enum as SQLEnum
-from sqlalchemy import Float
-from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+from sqlalchemy import Enum, Float, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from infrastructure.database.base import Base
 from infrastructure.database.mixins import TimestampMixin
+from infrastructure.database.models.enums import FlagStatus
 
 
-class FlagStatus(str, Enum):
-    OFF = "OFF"
-    ROLLING_OUT = "ROLLING_OUT"
-    PAUSED = "PAUSED"
-    ROLLED_BACK = "ROLLED_BACK"
-    FULLY_ON = "FULLY_ON"
-
-
-class Flag(TimestampMixin, Base):
+class Flag(Base, TimestampMixin):
     __tablename__ = "flags"
 
     id: Mapped[int] = mapped_column(
-        Integer,
         primary_key=True,
         autoincrement=True,
     )
@@ -32,28 +20,11 @@ class Flag(TimestampMixin, Base):
         String(100),
         unique=True,
         nullable=False,
+        index=True,
     )
 
-    description: Mapped[str | None] = mapped_column(
+    description: Mapped[str] = mapped_column(
         String(500),
-        nullable=True,
-    )
-
-    status: Mapped[FlagStatus] = mapped_column(
-        SQLEnum(FlagStatus),
-        default=FlagStatus.OFF,
-        nullable=False,
-    )
-
-    rollout_percentage: Mapped[int] = mapped_column(
-        Integer,
-        default=0,
-        nullable=False,
-    )
-
-    quality_threshold: Mapped[float] = mapped_column(
-        Float,
-        default=4.0,
         nullable=False,
     )
 
@@ -66,3 +37,31 @@ class Flag(TimestampMixin, Base):
         String(100),
         nullable=False,
     )
+
+    quality_threshold: Mapped[float] = mapped_column(
+        Float,
+        nullable=False,
+    )
+
+    status: Mapped[FlagStatus] = mapped_column(
+        Enum(
+            FlagStatus,
+            name="flag_status",
+        ),
+        nullable=False,
+        default=FlagStatus.DRAFT,
+    )
+
+    rollout_percentage: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=0,
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"Flag(id={self.id}, "
+            f"name='{self.name}', "
+            f"status='{self.status.value}', "
+            f"rollout={self.rollout_percentage}%)"
+        )
