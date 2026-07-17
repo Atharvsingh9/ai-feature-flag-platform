@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from sqlalchemy import Enum, Float, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import relationship
 
 from infrastructure.database.base import Base
 from infrastructure.database.mixins import TimestampMixin
 from infrastructure.database.models.enums import FlagStatus
+from infrastructure.database.models.rollout_event import RolloutEvent
 
 
 class Flag(Base, TimestampMixin):
@@ -57,6 +59,12 @@ class Flag(Base, TimestampMixin):
         nullable=False,
         default=0,
     )
+
+    events: Mapped[list["RolloutEvent"]] = relationship(
+    "RolloutEvent",
+    back_populates="flag",
+    cascade="all, delete-orphan",
+)
 
     def __repr__(self) -> str:
         return (

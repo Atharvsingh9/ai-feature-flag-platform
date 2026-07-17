@@ -12,3 +12,11 @@ class FlagNotFoundError(FlagError):
 
 class InvalidQualityThresholdError(FlagError):
     """Raised when the quality threshold is outside the valid range."""
+
+
+class InvalidFlagStateError(FlagError):
+    """Raised when a rollout action is invalid for the current flag state."""
+
+
+class InvalidRolloutPercentageError(FlagError):
+    """Raised when rollout percentage is not between 0 and 100."""
