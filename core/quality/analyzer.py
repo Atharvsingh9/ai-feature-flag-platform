@@ -49,8 +49,8 @@ class QualityAnalyzer:
         if not scores:
             raise ValueError("No quality scores provided.")
 
-        ordered = sorted(scores)
-
+        ordered = list(scores)
+        sorted_scores = sorted(scores)
         sample_size = len(ordered)
 
         p10_index = max(0, int(sample_size * 0.10) - 1)

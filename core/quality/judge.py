@@ -72,6 +72,11 @@ class MockJudge(BaseJudge):
                 score=1.0,
                 reasoning="Empty response.",
             )
+        if "i don't know" in text.lower():
+            return JudgeResult(
+                score=2.5,
+                reasoning="Response lacks confidence.",
+            )
 
         if len(text) < 20:
             return JudgeResult(
@@ -79,11 +84,13 @@ class MockJudge(BaseJudge):
                 reasoning="Response is too short.",
             )
 
-        if "i don't know" in text.lower():
+        
+        
+        if len(response.strip()) < 20:
             return JudgeResult(
-                score=2.5,
-                reasoning="Response lacks confidence.",
-            )
+                score=2.0,
+                reasoning="Response is too short.",
+            )                
 
         if len(text) > 250:
             return JudgeResult(

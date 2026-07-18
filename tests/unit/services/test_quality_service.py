@@ -2,7 +2,8 @@ from unittest.mock import Mock
 
 from core.quality.evaluator import EvaluationResult
 from apps.flags_service.services.quality_service import QualityService
-
+from apps.flags_service.schemas.quality import FeedbackType
+from uuid import uuid4
 
 def test_quality_service_calls_evaluator():
     evaluator = Mock()
@@ -24,15 +25,15 @@ def test_quality_service_calls_evaluator():
     )
 
     service.evaluate_response(
-        flag_id="flag-1",
+        flag_id=uuid4(),
         request_id="request-1",
         user_id="user-1",
-        variant="control",
-        prompt_version=1,
+        variant="baseline",
+        prompt_version="1",
         prompt="Hello",
         response="This is a good response.",
         latency_ms=500,
-        feedback="positive",
+        feedback=FeedbackType.POSITIVE,
         has_error=False,
         error_message=None,
         feedback_comment=None,
@@ -61,15 +62,15 @@ def test_quality_service_saves_result():
     )
 
     service.evaluate_response(
-        flag_id="flag-1",
+        flag_id=uuid4(),
         request_id="request-1",
         user_id="user-1",
-        variant="treatment",
-        prompt_version=2,
+        variant="experiment",
+        prompt_version="2",
         prompt="Explain AI",
         response="Artificial Intelligence simulates human reasoning.",
         latency_ms=600,
-        feedback="none",
+        feedback=FeedbackType.NONE,
         has_error=False,
         error_message=None,
         feedback_comment=None,
