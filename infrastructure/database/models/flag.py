@@ -65,6 +65,11 @@ class Flag(Base, TimestampMixin):
     back_populates="flag",
     cascade="all, delete-orphan",
 )
+    quality_scores = relationship(
+    "QualityScore",
+    back_populates="flag",
+    cascade="all, delete-orphan",
+)
 
     def __repr__(self) -> str:
         return (
