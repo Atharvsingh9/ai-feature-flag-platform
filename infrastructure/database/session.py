@@ -17,7 +17,7 @@ DATABASE_URL = URL.create(
 )
 print(DATABASE_URL.render_as_string(hide_password=False))
 
-engine = engine = create_engine(
+engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
 )

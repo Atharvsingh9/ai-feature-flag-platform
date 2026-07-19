@@ -8,6 +8,7 @@ from infrastructure.database.base import Base
 from infrastructure.database.mixins import TimestampMixin
 from infrastructure.database.models.enums import FlagStatus
 from infrastructure.database.models.rollout_event import RolloutEvent
+from infrastructure.database.models.rollout_plan import RolloutPlan
 
 
 class Flag(Base, TimestampMixin):
@@ -68,6 +69,12 @@ class Flag(Base, TimestampMixin):
     quality_scores = relationship(
     "QualityScore",
     back_populates="flag",
+    cascade="all, delete-orphan",
+)
+    rollout_plan: Mapped["RolloutPlan | None"] = relationship(
+    "RolloutPlan",
+    back_populates="flag",
+    uselist=False,
     cascade="all, delete-orphan",
 )
 
