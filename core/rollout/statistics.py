@@ -58,11 +58,17 @@ class RolloutStatistics:
             experiment_scores,
         )
 
-        effect = (
-            difference / pooled_std
-            if pooled_std > 0
-            else 0.0
-        )
+        if pooled_std > 0:
+            effect = difference / pooled_std
+        else:
+    # If there is no variance, treat any change in the mean
+    # as a meaningful effect.
+            if difference == 0:
+                effect = 0.0
+            elif difference < 0:
+                effect = float("-inf")
+            else:
+                effect = float("inf")
 
         return StatisticalComparison(
             baseline_mean=round(baseline_mean, 3),

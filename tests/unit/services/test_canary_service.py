@@ -182,6 +182,6 @@ def test_repository_limit_passed():
     )
 
     repository.get_recent_scores.assert_called_once_with(
-        flag_id=Mock.ANY,
+        flag_id=ANY,
         limit=250,
     )
