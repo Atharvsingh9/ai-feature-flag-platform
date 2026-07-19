@@ -10,6 +10,7 @@ from core.quality.analyzer import (
 )
 from notification.base import BaseNotifier
 from apps.flags_service.services.rollout_service import RolloutService
+from notification.slack import SlackNotifier
 
 
 @dataclass(frozen=True)
@@ -129,6 +130,14 @@ class RollbackMonitor:
             actor="quality-monitor",
             reason=reason,
         )
+        try:
+            self._notifier.notify(
+                title="Automatic Rollback",
+                message=reason,
+            )
+        except Exception:
+    # Rollback should never fail because notification failed.
+            pass
 
         #
         # Slack notification will be connected
@@ -152,3 +161,4 @@ class RollbackMonitor:
         return (
             datetime.utcnow() - last
         ) < self._cooldown
+    
