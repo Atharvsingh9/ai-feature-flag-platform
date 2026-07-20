@@ -9,6 +9,7 @@ class RolloutStageStatus(str, Enum):
     """
 
     PENDING = "pending"
+    SHADOW = "shadow"
     RUNNING = "running"
     PAUSED = "paused"
     COMPLETED = "completed"

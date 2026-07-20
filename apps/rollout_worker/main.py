@@ -29,7 +29,9 @@ from apps.flags_service.services.canary_service import (
 from apps.flags_service.services.rollout_scheduler import (
     RolloutSchedulerService,
 )
-
+from infrastructure.database.repositories.shadow_repository import (
+    ShadowRepository,
+)
 logger = logging.getLogger(__name__)
 
 
@@ -38,6 +40,7 @@ def create_scheduler() -> RolloutSchedulerService:
     db = SessionLocal()
 
     quality_repository = QualityRepository(db)
+    shadow_repository = ShadowRepository(db)
 
     rollout_repository = RolloutPlanRepository(db)
 
@@ -61,6 +64,7 @@ def create_scheduler() -> RolloutSchedulerService:
         repository=rollout_repository,
         canary_service=canary_service,
         scheduler=scheduler,
+        shadow_repository=shadow_repository,
     )
 
 

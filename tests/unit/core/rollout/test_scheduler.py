@@ -32,7 +32,7 @@ def make_stage(
     stage = Mock()
 
     stage.minimum_sample_size = minimum_sample_size
-
+    stage.minimum_quality_score = 4.0
     stage.auto_promote = auto_promote
 
     return stage
@@ -41,13 +41,17 @@ def make_stage(
 def make_plan(
     current_stage=0,
     total_stages=5,
+    shadow_enabled=False,
 ):
 
     plan = Mock()
 
     plan.current_stage_index = current_stage
-
     plan.stages = [Mock()] * total_stages
+
+    plan.flag = Mock()
+    plan.flag.shadow_enabled = shadow_enabled
+    plan.flag.quality_threshold = 4.0
 
     return plan
 

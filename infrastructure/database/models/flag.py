@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from sqlalchemy import Enum, Float, Integer, String
+from sqlalchemy import (
+    Boolean,
+    Enum,
+    Float,
+    Integer,
+    String,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import relationship
 
@@ -59,6 +65,17 @@ class Flag(Base, TimestampMixin):
         Integer,
         nullable=False,
         default=0,
+    )
+    shadow_enabled: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+    )
+
+    shadow_sample_percentage: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=100,
     )
 
     events: Mapped[list["RolloutEvent"]] = relationship(

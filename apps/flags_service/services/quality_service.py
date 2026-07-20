@@ -12,7 +12,7 @@ from apps.flags_service.schemas.quality import (
     QualityScoreCreate,
     VariantType,
 )
-
+from infrastructure.database.models.shadow_evaluation import ShadowEvaluation
 
 class QualityService:
     """
@@ -76,3 +76,17 @@ class QualityService:
         self._repository.create(quality_score)
 
         return evaluation
+    def evaluate_shadow(
+        self,
+        evaluation: ShadowEvaluation,
+    ) -> None:
+   
+
+    # Later you'll:
+    #
+    # - calculate quality metrics
+    # - update rolling windows
+    # - notify rollout scheduler
+    #
+    # For now this can simply return.
+        return

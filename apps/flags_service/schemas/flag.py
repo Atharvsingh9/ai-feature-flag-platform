@@ -32,6 +32,13 @@ class FlagCreate(BaseModel):
         ge=0,
         le=100,
     )
+    shadow_enabled: bool = False
+
+    shadow_sample_percentage: int = Field(
+        default=100,
+        ge=1,
+        le=100,
+    )
 
 
 class FlagUpdate(BaseModel):
@@ -40,6 +47,7 @@ class FlagUpdate(BaseModel):
         min_length=1,
         max_length=100,
     )
+   
 
     description: str | None = Field(
         default=None,
@@ -64,6 +72,15 @@ class FlagUpdate(BaseModel):
         ge=0,
         le=100,
     )
+    shadow_enabled: bool | None = None
+
+    shadow_sample_percentage: int | None = Field(
+        default=None,
+        ge=1,
+        le=100,
+    )
+    
+    
 
 
 class FlagResponse(BaseModel):
@@ -81,6 +98,8 @@ class FlagResponse(BaseModel):
     rollout_percentage: int
     created_at: datetime
     updated_at: datetime
+    shadow_enabled: bool
+    shadow_sample_percentage: int
 
 
 
