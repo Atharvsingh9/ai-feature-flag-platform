@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from uuid import uuid4
+
 from sqlalchemy import (
     Boolean,
     Enum,
@@ -7,22 +9,22 @@ from sqlalchemy import (
     Integer,
     String,
 )
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import relationship
 
 from infrastructure.database.base import Base
 from infrastructure.database.mixins import TimestampMixin
 from infrastructure.database.models.enums import FlagStatus
-from infrastructure.database.models.rollout_event import RolloutEvent
-from infrastructure.database.models.rollout_plan import RolloutPlan
 
 
 class Flag(Base, TimestampMixin):
     __tablename__ = "flags"
 
-    id: Mapped[int] = mapped_column(
+    id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True),
         primary_key=True,
-        autoincrement=True,
+        default=uuid4,
     )
 
     name: Mapped[str] = mapped_column(
@@ -79,21 +81,21 @@ class Flag(Base, TimestampMixin):
     )
 
     events: Mapped[list["RolloutEvent"]] = relationship(
-    "RolloutEvent",
-    back_populates="flag",
-    cascade="all, delete-orphan",
-)
+        "RolloutEvent",
+        back_populates="flag",
+        cascade="all, delete-orphan",
+    )
     quality_scores = relationship(
-    "QualityScore",
-    back_populates="flag",
-    cascade="all, delete-orphan",
-)
+        "QualityScore",
+        back_populates="flag",
+        cascade="all, delete-orphan",
+    )
     rollout_plan: Mapped["RolloutPlan | None"] = relationship(
-    "RolloutPlan",
-    back_populates="flag",
-    uselist=False,
-    cascade="all, delete-orphan",
-)
+        "RolloutPlan",
+        back_populates="flag",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
 
     def __repr__(self) -> str:
         return (

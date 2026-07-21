@@ -9,6 +9,7 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
 )
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from infrastructure.database.base import Base
@@ -36,7 +37,8 @@ class RolloutStage(Base, TimestampMixin):
         autoincrement=True,
     )
 
-    rollout_plan_id: Mapped[int] = mapped_column(
+    rollout_plan_id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True),
         ForeignKey(
             "rollout_plans.id",
             ondelete="CASCADE",

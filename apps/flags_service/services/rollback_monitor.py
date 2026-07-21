@@ -8,9 +8,10 @@ from core.quality.analyzer import (
     QualityAnalysis,
     QualityTrend,
 )
-from notification.base import BaseNotifier
+from notification.base import BaseNotifier, RollbackNotification
 from apps.flags_service.services.rollout_service import RolloutService
-from notification.slack import SlackNotifier
+
+from uuid import uuid4
 
 
 @dataclass(frozen=True)
@@ -131,18 +132,19 @@ class RollbackMonitor:
             reason=reason,
         )
         try:
-            self._notifier.notify(
-                title="Automatic Rollback",
-                message=reason,
+            notification = RollbackNotification(
+                flag_id=flag_id,
+                flag_name="",
+                rollout_percentage=0,
+                average_score=0.0,
+                p10_score=0.0,
+                reason=reason,
+                triggered_by="quality-monitor",
+                timestamp=datetime.utcnow().isoformat(),
             )
+            self._notifier.notify_rollback(notification)
         except Exception:
-    # Rollback should never fail because notification failed.
             pass
-
-        #
-        # Slack notification will be connected
-        # after FlagService integration.
-        #
 
         self._last_rollback[
             flag_id
@@ -161,4 +163,3 @@ class RollbackMonitor:
         return (
             datetime.utcnow() - last
         ) < self._cooldown
-    

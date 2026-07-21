@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Sequence
+from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -21,7 +22,7 @@ class FlagRepository:
         self.session.refresh(flag)
         return flag
 
-    def get_by_id(self, flag_id: int) -> Flag | None:
+    def get_by_id(self, flag_id: UUID) -> Flag | None:
         return self.session.get(Flag, flag_id)
 
     def get_by_name(self, name: str) -> Flag | None:

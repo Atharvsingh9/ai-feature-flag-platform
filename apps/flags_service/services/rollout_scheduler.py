@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from uuid import UUID
+
 from apps.flags_service.services.canary_service import CanaryService
 from core.rollout.scheduler import RolloutScheduler
 from infrastructure.database.models.enums import RolloutPlanStatus
@@ -24,7 +26,7 @@ class RolloutSchedulerService:
         repository: RolloutPlanRepository,
         canary_service: CanaryService,
         scheduler: RolloutScheduler,
-        shadow_repository = None,
+        shadow_repository=None,
     ):
         self.repository = repository
         self.canary_service = canary_service
@@ -144,14 +146,14 @@ class RolloutSchedulerService:
 
     def _shadow_statistics(
         self,
-        flag_id: int,
+        flag_id: UUID,
     ) -> tuple[int, float]:
         """
         Return the number of recent shadow evaluations
         and their average judge score.
         """
         if self._shadow_repository is None:
-            return 0 , 0.0 
+            return 0, 0.0
         evaluations = self._shadow_repository.latest(
             flag_id=flag_id,
             limit=100,

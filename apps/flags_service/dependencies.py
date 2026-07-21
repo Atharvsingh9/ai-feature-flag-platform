@@ -5,8 +5,6 @@ from sqlalchemy.orm import Session
 from core.quality.evaluator import QualityEvaluator
 from core.quality.judge import MockJudge
 
-from apps.quality_worker.settings import get_settings
-
 from notification.base import BaseNotifier
 from notification.noop import NoOpNotifier
 from notification.slack import SlackNotifier
@@ -16,6 +14,19 @@ from infrastructure.database.repositories.quality_repository import QualityRepos
 
 from apps.flags_service.services.flag_service import FlagService
 from apps.flags_service.services.quality_service import QualityService
+
+from infrastructure.database.repositories.rollout_event_repository import (
+    RolloutEventRepository,
+)
+
+from apps.flags_service.services.rollout_service import (
+    RolloutService,
+)
+from fastapi import Depends
+
+from infrastructure.database.session import get_db
+
+from apps.quality_worker.settings import get_settings
 
 
 def get_quality_judge() -> MockJudge:
@@ -47,35 +58,35 @@ def get_quality_evaluator() -> QualityEvaluator:
 
 
 def get_quality_repository(
-    db: Session,
+    db: Session = Depends(get_db),
 ) -> QualityRepository:
 
     return QualityRepository(db)
 
 
 def get_flag_repository(
-    db: Session,
+    db: Session = Depends(get_db),
 ) -> FlagRepository:
 
     return FlagRepository(db)
 
 
 def get_flag_service(
-    db: Session,
+    db: Session = Depends(get_db),
 ) -> FlagService:
 
     return FlagService(
-        repository=get_flag_repository(db),
+        repository=FlagRepository(db),
     )
 
 
 def get_quality_service(
-    db: Session,
+    db: Session = Depends(get_db),
 ) -> QualityService:
 
     return QualityService(
         evaluator=get_quality_evaluator(),
-        repository=get_quality_repository(db),
+        repository=QualityRepository(db),
     )
 
 
@@ -92,3 +103,18 @@ def get_notifier() -> BaseNotifier:
         )
 
     return NoOpNotifier()
+
+
+def get_rollout_event_repository(
+    db: Session = Depends(get_db),
+) -> RolloutEventRepository:
+    return RolloutEventRepository(db)
+
+
+def get_rollout_service(
+    db: Session = Depends(get_db),
+) -> RolloutService:
+    return RolloutService(
+        repository=FlagRepository(db),
+        event_repository=RolloutEventRepository(db),
+    )

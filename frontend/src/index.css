@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  @apply bg-surface-bg text-ink-900 font-sans antialiased;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(15,23,42,0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.dark body { background-color: #0B1120; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(37,99,235,0.25); border-radius: 999px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.glass {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+}
+
+.card {
+  @apply bg-surface-card rounded-card shadow-soft border border-black/[0.03];
+}
+
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-bg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

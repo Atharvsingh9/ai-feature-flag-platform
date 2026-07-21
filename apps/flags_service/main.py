@@ -1,17 +1,35 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from apps.flags_service.api.flags import router as flags_router
+from apps.flags_service.api.dashboard import router as dashboard_router
+from apps.demo_app.router import router as demo_router
 from apps.flags_service.exceptions.flag_exceptions import (
     FlagAlreadyExistsError,
     FlagNotFoundError,
     InvalidQualityThresholdError,
 )
+from infrastructure.database.base import Base
+from infrastructure.database.session import engine
 
 app = FastAPI(
     title="AI Feature Flag Platform",
     version="0.1.0",
     description="Backend service for AI Feature Flag Platform",
+)
+
+
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(engine)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -54,3 +72,5 @@ def health():
 
 
 app.include_router(flags_router)
+app.include_router(dashboard_router)
+app.include_router(demo_router)

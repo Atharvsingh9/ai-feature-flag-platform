@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy.orm import Session
 
 from infrastructure.database.models.rollout_event import RolloutEvent
@@ -13,7 +15,7 @@ class RolloutEventRepository:
         self.session.refresh(event)
         return event
 
-    def get_by_flag_id(self, flag_id: int) -> list[RolloutEvent]:
+    def get_by_flag_id(self, flag_id: UUID) -> list[RolloutEvent]:
         return (
             self.session.query(RolloutEvent)
             .filter(RolloutEvent.flag_id == flag_id)
@@ -21,7 +23,7 @@ class RolloutEventRepository:
             .all()
         )
 
-    def delete_all_for_flag(self, flag_id: int) -> None:
+    def delete_all_for_flag(self, flag_id: UUID) -> None:
         (
             self.session.query(RolloutEvent)
             .filter(RolloutEvent.flag_id == flag_id)

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from uuid import UUID
+
 from apps.flags_service.exceptions.flag_exceptions import (
     FlagNotFoundError,
     InvalidFlagStateError,
     InvalidRolloutPercentageError,
 )
+from infrastructure.database.models.enums import FlagStatus
 from infrastructure.database.models.flag import (
     Flag,
-    FlagStatus,
 )
 from infrastructure.database.models.rollout_event import (
     RolloutEvent,
@@ -41,7 +43,7 @@ class RolloutService:
         self.repository = repository
         self.event_repository = event_repository
 
-    def _get_flag(self, flag_id: int) -> Flag:
+    def _get_flag(self, flag_id: UUID) -> Flag:
         flag = self.repository.get_by_id(flag_id)
 
         if flag is None:
@@ -52,7 +54,7 @@ class RolloutService:
     def _create_event(
         self,
         *,
-        flag_id: int,
+        flag_id: UUID,
         event_type: RolloutEventType,
         actor: str,
         reason: str,
@@ -73,7 +75,7 @@ class RolloutService:
     def start_rollout(
         self,
         *,
-        flag_id: int,
+        flag_id: UUID,
         percentage: int,
         actor: str,
         reason: str,
@@ -111,7 +113,7 @@ class RolloutService:
     def pause_rollout(
         self,
         *,
-        flag_id: int,
+        flag_id: UUID,
         actor: str,
         reason: str,
     ) -> Flag:
@@ -140,7 +142,7 @@ class RolloutService:
     def resume_rollout(
         self,
         *,
-        flag_id: int,
+        flag_id: UUID,
         actor: str,
         reason: str,
     ) -> Flag:
@@ -169,7 +171,7 @@ class RolloutService:
     def rollback(
         self,
         *,
-        flag_id: int,
+        flag_id: UUID,
         actor: str,
         reason: str,
     ) -> Flag:

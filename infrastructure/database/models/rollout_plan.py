@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-from enum import Enum
 from uuid import uuid4
 
 from sqlalchemy import (
@@ -16,19 +15,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from infrastructure.database.base import Base
-
-
-class RolloutPlanStatus(str, Enum):
-    """
-    Represents the lifecycle of an entire rollout plan.
-    """
-
-    PENDING = "pending"
-    RUNNING = "running"
-    PAUSED = "paused"
-    COMPLETED = "completed"
-    ROLLED_BACK = "rolled_back"
-    CANCELLED = "cancelled"
+from infrastructure.database.models.enums import RolloutPlanStatus
+from infrastructure.database.models.rollout_stage import RolloutStage
 
 
 class RolloutPlan(Base):

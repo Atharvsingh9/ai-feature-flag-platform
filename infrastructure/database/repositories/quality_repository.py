@@ -6,7 +6,6 @@ from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 from infrastructure.database.models.quality_score import QualityScore
-from apps.flags_service.schemas.quality import QualityScoreCreate
 
 
 class QualityRepository:
@@ -20,32 +19,17 @@ class QualityRepository:
 
     def create(
         self,
-        quality_score: QualityScoreCreate,
+        quality_score: QualityScore,
     ) -> QualityScore:
         """
         Persist a new quality evaluation.
         """
 
-        db_quality_score = QualityScore(
-            flag_id=quality_score.flag_id,
-            request_id=quality_score.request_id,
-            user_id=quality_score.user_id,
-            variant=quality_score.variant,
-            prompt_version=quality_score.prompt_version,
-            judge_score=quality_score.judge_score,
-            overall_score=quality_score.overall_score,
-            latency_ms=quality_score.latency_ms,
-            error=quality_score.error,
-            error_message=quality_score.error_message,
-            feedback=quality_score.feedback,
-            feedback_comment=quality_score.feedback_comment,
-        )
-
-        self.db.add(db_quality_score)
+        self.db.add(quality_score)
         self.db.commit()
-        self.db.refresh(db_quality_score)
+        self.db.refresh(quality_score)
 
-        return db_quality_score
+        return quality_score
 
     def get_by_id(
         self,

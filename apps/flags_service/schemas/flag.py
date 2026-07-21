@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -47,7 +48,6 @@ class FlagUpdate(BaseModel):
         min_length=1,
         max_length=100,
     )
-   
 
     description: str | None = Field(
         default=None,
@@ -79,8 +79,6 @@ class FlagUpdate(BaseModel):
         ge=1,
         le=100,
     )
-    
-    
 
 
 class FlagResponse(BaseModel):
@@ -88,7 +86,7 @@ class FlagResponse(BaseModel):
         from_attributes=True,
     )
 
-    id: int
+    id: UUID
     name: str
     description: str
     baseline_variant: str
@@ -100,8 +98,6 @@ class FlagResponse(BaseModel):
     updated_at: datetime
     shadow_enabled: bool
     shadow_sample_percentage: int
-
-
 
 
 class RolloutRequest(BaseModel):

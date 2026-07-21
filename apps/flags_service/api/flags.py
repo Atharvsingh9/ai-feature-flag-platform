@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from apps.flags_service.dependencies import (
@@ -85,7 +87,7 @@ def list_flags(
     response_model=FlagResponse,
 )
 def get_flag(
-    flag_id: int,
+    flag_id: UUID,
     service: FlagService = Depends(get_flag_service),
 ) -> FlagResponse:
     flag = service.get_flag(flag_id)
@@ -98,7 +100,7 @@ def get_flag(
     response_model=FlagResponse,
 )
 def update_flag(
-    flag_id: int,
+    flag_id: UUID,
     request: FlagUpdate,
     service: FlagService = Depends(get_flag_service),
 ) -> FlagResponse:
@@ -115,7 +117,7 @@ def update_flag(
     status_code=status.HTTP_204_NO_CONTENT,
 )
 def delete_flag(
-    flag_id: int,
+    flag_id: UUID,
     service: FlagService = Depends(get_flag_service),
 ) -> None:
     service.delete_flag(flag_id)
@@ -131,7 +133,7 @@ def delete_flag(
     response_model=FlagResponse,
 )
 def start_rollout(
-    flag_id: int,
+    flag_id: UUID,
     request: RolloutRequest,
     service: RolloutService = Depends(get_rollout_service),
 ) -> FlagResponse:
@@ -150,7 +152,7 @@ def start_rollout(
     response_model=FlagResponse,
 )
 def pause_rollout(
-    flag_id: int,
+    flag_id: UUID,
     request: PauseRequest,
     service: RolloutService = Depends(get_rollout_service),
 ) -> FlagResponse:
@@ -168,7 +170,7 @@ def pause_rollout(
     response_model=FlagResponse,
 )
 def resume_rollout(
-    flag_id: int,
+    flag_id: UUID,
     request: PauseRequest,
     service: RolloutService = Depends(get_rollout_service),
 ) -> FlagResponse:
@@ -186,7 +188,7 @@ def resume_rollout(
     response_model=FlagResponse,
 )
 def rollback(
-    flag_id: int,
+    flag_id: UUID,
     request: RollbackRequest,
     service: RolloutService = Depends(get_rollout_service),
 ) -> FlagResponse:
@@ -206,7 +208,7 @@ def rollback(
 
 @router.get("/{flag_id}/events")
 def get_events(
-    flag_id: int,
+    flag_id: UUID,
     repository: RolloutEventRepository = Depends(
         get_rollout_event_repository,
     ),

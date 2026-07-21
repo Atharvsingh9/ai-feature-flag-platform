@@ -1,18 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
-from enum import Enum
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-
-class RolloutPlanStatus(str, Enum):
-    PENDING = "pending"
-    RUNNING = "running"
-    PAUSED = "paused"
-    COMPLETED = "completed"
-    ROLLED_BACK = "rolled_back"
-    CANCELLED = "cancelled"
+from infrastructure.database.models.enums import RolloutPlanStatus
 
 
 class RolloutStageCreate(BaseModel):
@@ -41,20 +34,22 @@ class RolloutPlanCreate(BaseModel):
 
 class RolloutStageResponse(BaseModel):
     id: int
+    rollout_plan_id: UUID
     order: int
     traffic_percentage: int
     duration_minutes: int
     minimum_quality_score: float
     minimum_sample_size: int
     auto_promote: bool
+    status: RolloutPlanStatus
 
     class Config:
         from_attributes = True
 
 
 class RolloutPlanResponse(BaseModel):
-    id: int
-    flag_id: int
+    id: UUID
+    flag_id: UUID
     name: str
     description: str | None
     status: RolloutPlanStatus

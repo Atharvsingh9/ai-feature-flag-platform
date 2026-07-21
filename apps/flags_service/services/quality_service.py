@@ -9,10 +9,11 @@ from core.quality.evaluator import (
 from infrastructure.database.repositories.quality_repository import QualityRepository
 from apps.flags_service.schemas.quality import (
     FeedbackType,
-    QualityScoreCreate,
     VariantType,
 )
+from infrastructure.database.models.quality_score import QualityScore
 from infrastructure.database.models.shadow_evaluation import ShadowEvaluation
+
 
 class QualityService:
     """
@@ -58,7 +59,7 @@ class QualityService:
             has_error=has_error,
         )
 
-        quality_score = QualityScoreCreate(
+        quality_score = QualityScore(
             flag_id=flag_id,
             request_id=request_id,
             user_id=user_id,
@@ -76,17 +77,13 @@ class QualityService:
         self._repository.create(quality_score)
 
         return evaluation
+
     def evaluate_shadow(
         self,
         evaluation: ShadowEvaluation,
     ) -> None:
-   
+        """
+        Evaluate a shadow execution result.
+        """
 
-    # Later you'll:
-    #
-    # - calculate quality metrics
-    # - update rolling windows
-    # - notify rollout scheduler
-    #
-    # For now this can simply return.
         return

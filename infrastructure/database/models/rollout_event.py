@@ -8,6 +8,7 @@ from sqlalchemy import (
     Integer,
     String,
 )
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -31,9 +32,11 @@ class RolloutEvent(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
+        autoincrement=True,
     )
 
-    flag_id: Mapped[int] = mapped_column(
+    flag_id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True),
         ForeignKey("flags.id"),
         nullable=False,
     )

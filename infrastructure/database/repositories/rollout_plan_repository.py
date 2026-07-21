@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from infrastructure.database.models.enums import RolloutPlanStatus
 from infrastructure.database.models.rollout_plan import RolloutPlan
 from infrastructure.database.models.rollout_stage import RolloutStage
 
@@ -26,7 +29,7 @@ class RolloutPlanRepository:
 
     def get_by_id(
         self,
-        plan_id: int,
+        plan_id: UUID,
     ) -> RolloutPlan | None:
         return self.session.get(
             RolloutPlan,
@@ -39,7 +42,7 @@ class RolloutPlanRepository:
         stmt = (
             select(RolloutPlan)
             .where(
-                RolloutPlan.status == "running"
+                RolloutPlan.status == RolloutPlanStatus.RUNNING
             )
         )
 
@@ -51,7 +54,7 @@ class RolloutPlanRepository:
         self,
         plan: RolloutPlan,
     ) -> RolloutPlan:
-        plan.status = "running"
+        plan.status = RolloutPlanStatus.RUNNING
         self.session.commit()
         self.session.refresh(plan)
         return plan
@@ -60,7 +63,7 @@ class RolloutPlanRepository:
         self,
         plan: RolloutPlan,
     ) -> RolloutPlan:
-        plan.status = "paused"
+        plan.status = RolloutPlanStatus.PAUSED
         self.session.commit()
         self.session.refresh(plan)
         return plan
@@ -69,7 +72,7 @@ class RolloutPlanRepository:
         self,
         plan: RolloutPlan,
     ) -> RolloutPlan:
-        plan.status = "rolled_back"
+        plan.status = RolloutPlanStatus.ROLLED_BACK
         self.session.commit()
         self.session.refresh(plan)
         return plan
@@ -78,7 +81,7 @@ class RolloutPlanRepository:
         self,
         plan: RolloutPlan,
     ) -> RolloutPlan:
-        plan.status = "completed"
+        plan.status = RolloutPlanStatus.COMPLETED
         self.session.commit()
         self.session.refresh(plan)
         return plan

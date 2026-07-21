@@ -13,7 +13,7 @@ from sqlalchemy import (
     Text,
 )
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from infrastructure.database.base import Base
 
@@ -83,4 +83,9 @@ class ShadowEvaluation(Base):
         DateTime,
         default=datetime.utcnow,
         nullable=False,
+    )
+
+    flag = relationship(
+        "Flag",
+        backref="shadow_evaluations",
     )

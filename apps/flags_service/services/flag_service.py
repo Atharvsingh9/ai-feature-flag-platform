@@ -1,10 +1,9 @@
 from __future__ import annotations
 
+from uuid import UUID
+
 from infrastructure.database.models.flag import Flag
 from infrastructure.database.repositories.flag_repository import FlagRepository
-from infrastructure.database.repositories.rollout_event_repository import (
-    RolloutEventRepository,
-)
 
 from apps.flags_service.exceptions.flag_exceptions import (
     FlagAlreadyExistsError,
@@ -57,7 +56,7 @@ class FlagService:
 
     def get_flag(
         self,
-        flag_id: int,
+        flag_id: UUID,
     ) -> Flag:
 
         flag = self.repository.get_by_id(flag_id)
@@ -74,7 +73,7 @@ class FlagService:
 
     def update_flag(
         self,
-        flag_id: int,
+        flag_id: UUID,
         request: FlagUpdate,
     ) -> Flag:
 
@@ -125,7 +124,7 @@ class FlagService:
 
     def delete_flag(
         self,
-        flag_id: int,
+        flag_id: UUID,
     ) -> None:
 
         flag = self.repository.get_by_id(flag_id)

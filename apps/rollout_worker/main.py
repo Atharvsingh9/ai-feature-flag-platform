@@ -68,33 +68,6 @@ def create_scheduler() -> RolloutSchedulerService:
     )
 
 
-def create_scheduler() -> RolloutSchedulerService:
-    db = SessionLocal()
-
-    quality_repository = QualityRepository(db)
-    rollout_repository = RolloutPlanRepository(db)
-
-    quality = QualityAnalyzer()
-    statistics = RolloutStatistics()
-    canary = CanaryAnalyzer(
-        statistics=statistics,
-    )
-
-    canary_service = CanaryService(
-        repository=quality_repository,
-        quality_analyzer=quality,
-        canary_analyzer=canary,
-    )
-
-    scheduler = RolloutScheduler()
-
-    return RolloutSchedulerService(
-        repository=rollout_repository,
-        canary_service=canary_service,
-        scheduler=scheduler,
-    )
-
-
 def main() -> None:
     scheduler = create_scheduler()
 
